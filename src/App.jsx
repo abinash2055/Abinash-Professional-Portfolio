@@ -1,19 +1,27 @@
-import React from 'react'
 
-import Navbar from "./components/Navbar"
-import Hero from "./components/Hero"
-import AboutMe from "./components/AboutMe"
-import Skills from "./components/Skills"
-import Experience from "./components/Experience"
-import AwardsCertificate from "./components/AwardsCertificate"
-import Education from "./components/Education"
-import Tools from "./components/Tools"
-import Projects from "./components/Projects"
-import Contact from "./components/Contact"
-import Footer from "./components/Footer"
+import React from "react";
+import { Routes, Route } from "react-router-dom";
 
+// Portfolio Components
+import Navbar from "./components/Navbar";
+import Hero from "./components/Hero";
+import AboutMe from "./components/AboutMe";
+import Skills from "./components/Skills";
+import Experience from "./components/Experience";
+import AwardsCertificate from "./components/AwardsCertificate";
+import Education from "./components/Education";
+import Tools from "./components/Tools";
+import Projects from "./components/Projects";
+import Contact from "./components/Contact";
+import Footer from "./components/Footer";
 
-const App = () => {
+// Legal Page Components
+import TermsConditions from "./components/footer/TermsConditions";
+import PrivacyPolicy from "./components/footer/PrivacyPolicy";
+import Disclaimer from "./components/footer/Disclaimer";
+
+// Main Portfolio Homepage
+const Home = () => {
   return (
     <div className="min-h-screen w-full overflow-x-hidden">
 
@@ -43,12 +51,12 @@ const App = () => {
           <Experience />
         </section>
 
-        {/* Achieved Awards and Certificate */}
+        {/* Awards and Certificates */}
         <section id="awardscertificate" className="scroll-mt-24">
           <AwardsCertificate />
         </section>
 
-        {/* Learned Education */}
+        {/* Education */}
         <section id="education" className="scroll-mt-24">
           <Education />
         </section>
@@ -74,7 +82,37 @@ const App = () => {
       <Footer />
 
     </div>
-  )
-}
+  );
+};
 
-export default App
+// Application Routes
+const App = () => {
+  return (
+    <Routes>
+
+      {/* Homepage */}
+      <Route path="/" element={<Home />} />
+
+      {/* Terms & Conditions Page */}
+      <Route
+        path="/terms-and-conditions"
+        element={<TermsConditions />}
+      />
+
+      {/* Privacy Policy Page */}
+      <Route
+        path="/privacy-policy"
+        element={<PrivacyPolicy />}
+      />
+
+      {/* Disclaimer Page */}
+      <Route
+        path="/disclaimer"
+        element={<Disclaimer />}
+      />
+
+    </Routes>
+  );
+};
+
+export default App;
