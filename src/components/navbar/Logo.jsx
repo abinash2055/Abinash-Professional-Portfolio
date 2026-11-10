@@ -52,7 +52,10 @@ const Logo = () => {
           motion-safe:animate-spin 
           motion-safe:[animation-direction:reverse] 
           group-hover:[animation-play-state:paused] 
-          group-focus-visible:[animation-play-state:paused]"
+          group-focus-visible:[animation-play-state:paused]
+          transition-transform duration-500 ease-in-out
+          group-hover:scale-125
+          group-focus-visible:scale-125"
 
         // Rotation speed: one complete revolution every 5 seconds
         style={{ animationDuration: "5s" }}

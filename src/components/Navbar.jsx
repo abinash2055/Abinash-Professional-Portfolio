@@ -4,6 +4,7 @@ import React from 'react'
 import Logo from "./navbar/Logo";
 import Title from "./navbar/Title";
 import NavLinks from './navbar/NavLinks';
+import ResumeMenu from './navbar/ResumeMenu';
 
 const Navbar = () => {
   return (
@@ -21,6 +22,11 @@ const Navbar = () => {
         {/* Navigation Links */}
         <div className="ml-16 shrink-0">
           <NavLinks />
+        </div>
+
+        {/* Resume Dropdown */}
+        <div className="ml-16 shrink-0 rounded-xl">
+          <ResumeMenu />
         </div>
 
       </div>
