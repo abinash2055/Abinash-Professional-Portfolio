@@ -3,39 +3,47 @@ import { Link } from "react-router-dom";
 
 import CopyRight from "./footer/CopyRight";
 
+// Footer Sections
+import FooterCTA from "./footer/FooterCTA";
+import FooterBrand from "./footer/FooterBrand";
+import FooterNavigation from "./footer/FooterNavigation";
+import FooterSocials from "./footer/FooterSocials";
+import FooterConnect from "./footer/FooterConnect";
+import FooterBottom from "./footer/FooterBottom";
+
+
 const Footer = () => {
   return (
-    <footer className="w-full">
+    <>
+      <footer className="w-full px-4 pb-5 pt-10 sm:px-6 lg:px-10">
 
-      {/* Copyright and Legal Navigation */}
-      <div className="mx-auto flex w-full max-w-7xl flex-col items-center justify-between gap-4 border-t border-gray-200 px-5 py-6 dark:border-gray-800 sm:flex-row sm:px-8 lg:px-12">
+        {/* Main Footer Container */}
+        <div className="mx-auto max-w-7xl overflow-hidden rounded-[28px] border border-gray-200 bg-[#f8f9fa] px-6 py-10 shadow-sm sm:px-10 lg:px-12">
 
-        {/* Copyright */}
-        <CopyRight />
+          {/* CTA Section */}
+          <FooterCTA />
 
-        {/* Legal Navigation Links */}
-        <nav className="flex flex-wrap items-center justify-center gap-5 text-sm">
+          {/* Footer Sections */}
+          <div className="grid grid-cols-1 gap-10 border-b border-gray-200 pb-12 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
 
-          <Link
-            to="/terms-and-conditions">
-            Terms & Conditions
-          </Link>
+            <FooterBrand />
 
-          <Link
-            to="/privacy-policy">
-            Privacy Policy
-          </Link>
+            <FooterNavigation />
 
-          <Link
-            to="/disclaimer">
-            Disclaimer
-          </Link>
+            <FooterSocials />
 
-        </nav>
+            <FooterConnect />
 
-      </div>
+          </div>
 
-    </footer>
+          {/* Bottom Section */}
+          <FooterBottom />
+
+        </div>
+
+      </footer>
+    </>
+
   );
 };
 
