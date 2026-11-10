@@ -5,6 +5,8 @@ import Logo from "./navbar/Logo";
 import Title from "./navbar/Title";
 import NavLinks from './navbar/NavLinks';
 import ResumeMenu from './navbar/ResumeMenu';
+import GetHire from './navbar/GetHire';
+import ToggleTheme from './navbar/ToggleTheme';
 
 const Navbar = () => {
   return (
@@ -27,6 +29,16 @@ const Navbar = () => {
         {/* Resume Dropdown */}
         <div className="ml-16 shrink-0 rounded-xl">
           <ResumeMenu />
+        </div>
+
+        {/* Get Hired Button */}
+        <div className="shrink-0">
+          <GetHire />
+        </div>
+
+        {/* Theme Toggle */}
+        <div className="ml-2 shrink-0">
+          <ToggleTheme />
         </div>
 
       </div>

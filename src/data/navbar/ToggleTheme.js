@@ -1,9 +1,20 @@
-//  To toggle Theme
+
+// Toggle Theme Configuration
 
 const toggleThemeData = {
-  lightLabel: "Light Mode",
-  darkLabel: "Dark Mode",
-  defaultTheme: "light",
+    title: "Toggle Theme",
+
+    themes: {
+        light: {
+            color: "#2563EB",
+            icon: "sun",
+        },
+
+        dark: {
+            color: "#000000",
+            icon: "moon",
+        },
+    },
 };
 
 export default toggleThemeData;

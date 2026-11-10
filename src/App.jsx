@@ -26,13 +26,18 @@ import CustomCursor from "./components/CustomCursor";
 // Main Portfolio Homepage
 const Home = () => {
   return (
-    <div className="min-h-screen w-full overflow-x-hidden">
+    <div className="min-h-screen w-full overflow-x-hidden
+        bg-white text-gray-900
+        transition-colors duration-500
+        dark:bg-black dark:text-white">
 
       {/* Navigation */}
       <Navbar />
 
       {/* Main Portfolio Content */}
-      <main className="mx-auto flex w-full max-w-7xl flex-col gap-24 px-5 py-10 sm:px-8 md:gap-32 lg:px-12">
+      <main className="mx-auto flex w-full max-w-7xl flex-col
+        gap-24 px-5 py-10
+        sm:px-8 md:gap-32 lg:px-12">
 
         {/* Hero Section */}
         <section id="home" className="scroll-mt-24">
@@ -92,7 +97,8 @@ const Home = () => {
 const App = () => {
   return (
     <>
-    <CustomCursor />
+      <CustomCursor />
+      
       <Routes>
 
         {/* Homepage */}

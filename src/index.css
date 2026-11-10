@@ -12,3 +12,6 @@
         cursor: none !important;
     }
 }
+
+/* For Theme Configuration */
+@custom-variant dark (&:where(.dark, .dark *));
