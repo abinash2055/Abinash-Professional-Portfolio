@@ -1,1 +1,14 @@
 @import "tailwindcss";
+
+/* Mouse Pointer */
+@media (hover: hover) and (pointer: fine) {
+
+    body,
+    a,
+    button,
+    input,
+    textarea,
+    select {
+        cursor: none !important;
+    }
+}

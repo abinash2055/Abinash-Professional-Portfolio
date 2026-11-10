@@ -20,6 +20,9 @@ import TermsConditions from "./components/footer/TermsConditions";
 import PrivacyPolicy from "./components/footer/PrivacyPolicy";
 import Disclaimer from "./components/footer/Disclaimer";
 
+// Mouse Pointer
+import CustomCursor from "./components/CustomCursor";
+
 // Main Portfolio Homepage
 const Home = () => {
   return (
@@ -88,30 +91,33 @@ const Home = () => {
 // Application Routes
 const App = () => {
   return (
-    <Routes>
+    <>
+    <CustomCursor />
+      <Routes>
 
-      {/* Homepage */}
-      <Route path="/" element={<Home />} />
+        {/* Homepage */}
+        <Route path="/" element={<Home />} />
 
-      {/* Terms & Conditions Page */}
-      <Route
-        path="/terms-and-conditions"
-        element={<TermsConditions />}
-      />
+        {/* Terms & Conditions Page */}
+        <Route
+          path="/terms-and-conditions"
+          element={<TermsConditions />}
+        />
 
-      {/* Privacy Policy Page */}
-      <Route
-        path="/privacy-policy"
-        element={<PrivacyPolicy />}
-      />
+        {/* Privacy Policy Page */}
+        <Route
+          path="/privacy-policy"
+          element={<PrivacyPolicy />}
+        />
 
-      {/* Disclaimer Page */}
-      <Route
-        path="/disclaimer"
-        element={<Disclaimer />}
-      />
+        {/* Disclaimer Page */}
+        <Route
+          path="/disclaimer"
+          element={<Disclaimer />}
+        />
 
-    </Routes>
+      </Routes>
+    </>
   );
 };
 
