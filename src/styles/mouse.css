@@ -1,0 +1,106 @@
+
+/* =====================================
+   CUSTOM MOUSE CURSOR
+===================================== */
+
+/* Hide default cursor on desktop */
+@media (hover: hover) and (pointer: fine) {
+  body,
+  a,
+  button,
+  input,
+  textarea,
+  select,
+  [role="button"],
+  .cursor-pointer {
+    cursor: none !important;
+  }
+}
+
+/* Interactive elements */
+a,
+button,
+[role="button"],
+.cursor-pointer {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Main cursor */
+.custom-cursor {
+  transition: opacity 0.2s ease;
+  will-change: transform;
+}
+
+/* Outer ring */
+.custom-cursor-ring {
+  border: 1px solid rgba(120, 120, 120, 0.8);
+  background: transparent;
+
+  transition:
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    width 0.3s ease,
+    height 0.3s ease,
+    border-color 0.3s ease,
+    background 0.3s ease,
+    box-shadow 0.3s ease;
+
+  transform-origin: center;
+}
+
+/* Hover effect */
+.custom-cursor-ring.cursor-hover {
+  border-color: #06b6d4;
+  background: rgba(6, 182, 212, 0.12);
+  box-shadow:
+    0 0 10px rgba(6, 182, 212, 0.2),
+    0 0 25px rgba(6, 182, 212, 0.12);
+}
+
+/* Center dot */
+.custom-cursor-dot {
+  background: #111827;
+  border-radius: 50%;
+  transition: transform 0.2s ease;
+}
+
+.dark .custom-cursor-dot {
+  background: white;
+}
+
+/* Click ripple */
+.custom-cursor-ripple {
+  border: 1px solid rgba(6, 182, 212, 0.8);
+  animation: cursor-ripple 0.55s ease-out forwards;
+}
+
+@keyframes cursor-ripple {
+  0% {
+    transform: scale(0.5);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+/* Smooth cursor transitions */
+.custom-cursor,
+.custom-cursor-ring,
+.custom-cursor-dot {
+  pointer-events: none;
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .custom-cursor,
+  .custom-cursor-ring,
+  .custom-cursor-dot {
+    transition: none !important;
+  }
+
+  .custom-cursor-ripple {
+    animation: none !important;
+  }
+}
