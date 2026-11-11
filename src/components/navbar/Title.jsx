@@ -14,7 +14,7 @@ export default function Title() {
         >
             <span
                 style={{
-                    fontSize: 16,
+                    fontSize: 25,
                     fontWeight: 800,
                     letterSpacing: "0.06em",
                     color: "var(--text, #111827)",
@@ -28,11 +28,11 @@ export default function Title() {
             </span>
             <span
                 style={{
-                    marginTop: 3,
-                    fontSize: 11,
-                    fontWeight: 500,
+                    marginTop: 4,
+                    fontSize: 15,
+                    fontWeight: 600,
                     letterSpacing: "0.28em",
-                    color: "var(--text-secondary, #64748B)",
+                    color: "var(--text-secondary, #4e5968)",
                 }}
             >
                 {title.description}

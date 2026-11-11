@@ -23,10 +23,10 @@ export default function Logo() {
             <img
                 src={logo.src}
                 alt={logo.alt}
-                style={{ height: 40, width: "auto", display: "block" }}
+                style={{ height: 75, width: "auto", display: "block" }}
             />
             {logo.showName && (
-                <span style={{ fontWeight: 700, fontSize: 16 }}>{logo.name}</span>
+                <span style={{ fontWeight: 700, fontSize: 20 }}>{logo.name}</span>
             )}
         </motion.a>
     );

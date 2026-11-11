@@ -9,10 +9,7 @@ const icons = { sun: Sun, moon: Moon };
 const gradientOf = ({ gradient }) =>
     `linear-gradient(${gradient.direction}, ${gradient.from}, ${gradient.via}, ${gradient.to})`;
 
-/**
- * Writes the chosen theme to <html> as CSS variables, so every other
- * component can use var(--bg), var(--text), var(--accent) and so on.
- */
+
 export function applyTheme(mode, { animate = false } = {}) {
     const theme = toggleThemeData.themes[mode];
     const root = document.documentElement;

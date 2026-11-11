@@ -83,10 +83,10 @@ export default function ResumeMenu() {
         style={{
           display: "inline-flex",
           alignItems: "center",
-          gap: 8,
-          padding: "9px 14px",
+          gap: 10,
+          padding: "12px 20px",
           borderRadius: 999,
-          fontSize: 14,
+          fontSize: 16,
           fontWeight: 600,
           cursor: "pointer",
           whiteSpace: "nowrap",
@@ -95,7 +95,7 @@ export default function ResumeMenu() {
           border: "1px solid var(--border, #E2E8F0)",
         }}
       >
-        <Icon size={16} />
+        <Icon size={19} />
         <span>{title}</span>
         <motion.span
           animate={{ rotate: open ? 180 : 0 }}

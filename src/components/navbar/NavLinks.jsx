@@ -2,12 +2,7 @@ import { useEffect, useId, useState } from "react";
 import { motion } from "framer-motion";
 import navbarLinks from "../../data/navbar/NavLinks";
 
-/**
- * Props
- *  - orientation: "horizontal" (desktop bar) or "vertical" (mobile menu)
- *  - showTitle:   show the "Explore" heading, useful in the mobile menu
- *  - onNavigate:  called after a link is clicked, e.g. to close the mobile menu
- */
+
 export default function NavLinks({ orientation = "horizontal", showTitle = false, onNavigate }) {
   const { title, links, animation } = navbarLinks;
   const [active, setActive] = useState(links[0]?.path);
@@ -92,17 +87,20 @@ export default function NavLinks({ orientation = "horizontal", showTitle = false
                 href={path}
                 onClick={(e) => handleClick(e, path)}
                 aria-current={isActive ? "location" : undefined}
+                className="nav-link"
                 style={{
                   position: "relative",
                   display: "block",
-                  padding: vertical ? "12px 14px" : "8px 14px",
+                  padding: vertical ? "12px 14px" : "10px 14px",
                   borderRadius: 999,
-                  fontSize: 14,
-                  fontWeight: isActive ? 600 : 500,
+                  fontSize: vertical ? 16 : 16,
+                  fontWeight: 700,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.5px",
                   textDecoration: "none",
                   color: isActive
                     ? "var(--accent, #4338CA)"
-                    : "var(--text-secondary, #64748B)",
+                    : "var(--text, #111827)",
                   transition: "color 0.25s ease",
                 }}
               >
@@ -119,7 +117,10 @@ export default function NavLinks({ orientation = "horizontal", showTitle = false
                     }}
                   />
                 )}
-                <span style={{ position: "relative", zIndex: 1 }}>{name}</span>
+
+                <span className="nav-link-text">
+                  {name}
+                </span>
               </a>
             </motion.li>
           );

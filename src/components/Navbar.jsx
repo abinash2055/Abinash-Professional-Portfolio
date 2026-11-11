@@ -39,8 +39,8 @@ export default function Navbar() {
 
       <div
         style={{
-          width: "100%",
-          padding: "10px 20px",
+          margin: "0 auto",
+          padding: "18px 20px",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
@@ -72,16 +72,16 @@ export default function Navbar() {
             onClick={() => setMenuOpen((v) => !v)}
             style={{
               placeItems: "center",
-              width: 38,
-              height: 38,
-              borderRadius: 12,
+              width: 46,
+              height: 46,
+              borderRadius: 14,
               cursor: "pointer",
               color: "var(--text, #111827)",
               background: "var(--surface, #F8FAFC)",
               border: "1px solid var(--border, #E2E8F0)",
             }}
           >
-            {menuOpen ? <X size={18} /> : <Menu size={18} />}
+            {menuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
       </div>

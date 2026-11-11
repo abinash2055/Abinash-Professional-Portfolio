@@ -3,7 +3,7 @@
 
 const navbarTitle = {
     title: {
-        name: "ABINASH NATH PANDEY",
+        name: "ABINASH NATH PANDEY.",
         description: "COMPUTER ENGINEER",
     },
 

@@ -11,7 +11,6 @@ const navbarLinks = {
         { id: 4, name: "Achievements", path: "#awards-and-certificate" },
         { id: 5, name: "Education", path: "#education" },
         { id: 6, name: "Projects", path: "#projects" },
-        { id: 7, name: "Contact", path: "#contact" },
     ],
 
     animation: {
