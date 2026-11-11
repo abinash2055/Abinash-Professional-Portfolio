@@ -1,7 +1,7 @@
+
 import { useEffect, useId, useState } from "react";
 import { motion } from "framer-motion";
 import navbarLinks from "../../data/navbar/NavLinks";
-
 
 export default function NavLinks({ orientation = "horizontal", showTitle = false, onNavigate }) {
   const { title, links, animation } = navbarLinks;
@@ -10,7 +10,6 @@ export default function NavLinks({ orientation = "horizontal", showTitle = false
   const vertical = orientation === "vertical";
   const animated = animation?.enabled;
 
-  // Highlight the link whose section is currently in the middle of the screen.
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -20,10 +19,12 @@ export default function NavLinks({ orientation = "horizontal", showTitle = false
       },
       { rootMargin: "-45% 0px -50% 0px" }
     );
+
     links.forEach(({ path }) => {
       const el = document.getElementById(path.replace("#", ""));
       if (el) observer.observe(el);
     });
+
     return () => observer.disconnect();
   }, [links]);
 
@@ -39,15 +40,23 @@ export default function NavLinks({ orientation = "horizontal", showTitle = false
 
   const container = {
     hidden: {},
-    visible: { transition: { staggerChildren: animation?.stagger ?? 0.08 } },
+    visible: {
+      transition: { staggerChildren: animation?.stagger ?? 0.08 },
+    },
   };
+
   const item = {
-    hidden: animated ? { opacity: 0, ...(vertical ? { x: -16 } : { y: -10 }) } : {},
+    hidden: animated
+      ? { opacity: 0, ...(vertical ? { x: -16 } : { y: -10 }) }
+      : {},
     visible: {
       opacity: 1,
       x: 0,
       y: 0,
-      transition: { duration: animation?.duration ?? 0.3, ease: "easeOut" },
+      transition: {
+        duration: animation?.duration ?? 0.3,
+        ease: "easeOut",
+      },
     },
   };
 
@@ -65,6 +74,7 @@ export default function NavLinks({ orientation = "horizontal", showTitle = false
           {title}
         </p>
       )}
+
       <motion.ul
         variants={container}
         initial="hidden"
@@ -81,8 +91,25 @@ export default function NavLinks({ orientation = "horizontal", showTitle = false
       >
         {links.map(({ id, name, path }) => {
           const isActive = active === path;
+
           return (
-            <motion.li key={id} variants={item} style={{ position: "relative" }}>
+            <motion.li
+              key={id}
+              variants={item}
+              whileHover={{
+                y: -5,
+                scale: 1.1,
+                transition: {
+                  duration: 0.22,
+                  ease: "easeOut",
+                },
+              }}
+              whileTap={{ scale: 0.96 }}
+              style={{
+                position: "relative",
+                transformOrigin: "center",
+              }}
+            >
               <a
                 href={path}
                 onClick={(e) => handleClick(e, path)}
@@ -93,7 +120,7 @@ export default function NavLinks({ orientation = "horizontal", showTitle = false
                   display: "block",
                   padding: vertical ? "12px 14px" : "10px 14px",
                   borderRadius: 999,
-                  fontSize: vertical ? 16 : 16,
+                  fontSize: 16,
                   fontWeight: 700,
                   textTransform: "uppercase",
                   letterSpacing: "0.5px",
@@ -107,7 +134,11 @@ export default function NavLinks({ orientation = "horizontal", showTitle = false
                 {isActive && (
                   <motion.span
                     layoutId={`nav-pill-${pillId}`}
-                    transition={{ type: "spring", stiffness: 380, damping: 32 }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 380,
+                      damping: 32,
+                    }}
                     style={{
                       position: "absolute",
                       inset: 0,
@@ -118,7 +149,14 @@ export default function NavLinks({ orientation = "horizontal", showTitle = false
                   />
                 )}
 
-                <span className="nav-link-text">
+                <span
+                  className="nav-link-text"
+                  style={{
+                    position: "relative",
+                    zIndex: 1,
+                    display: "inline-block",
+                  }}
+                >
                   {name}
                 </span>
               </a>

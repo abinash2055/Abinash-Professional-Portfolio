@@ -15,11 +15,6 @@ import Projects from "./components/Projects";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 
-// Legal Page Components
-import TermsConditions from "./components/footer/TermsConditions";
-import PrivacyPolicy from "./components/footer/PrivacyPolicy";
-import Disclaimer from "./components/footer/Disclaimer";
-
 // Mouse Pointer
 import CustomCursor from "./components/CustomCursor";
 
@@ -98,29 +93,12 @@ const App = () => {
   return (
     <>
       <CustomCursor />
-      
+
       <Routes>
 
         {/* Homepage */}
         <Route path="/" element={<Home />} />
 
-        {/* Terms & Conditions Page */}
-        <Route
-          path="/terms-and-conditions"
-          element={<TermsConditions />}
-        />
-
-        {/* Privacy Policy Page */}
-        <Route
-          path="/privacy-policy"
-          element={<PrivacyPolicy />}
-        />
-
-        {/* Disclaimer Page */}
-        <Route
-          path="/disclaimer"
-          element={<Disclaimer />}
-        />
 
       </Routes>
     </>
