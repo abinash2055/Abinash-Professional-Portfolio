@@ -1,106 +1,526 @@
+/* ==================================================
+   CUSTOM CURSOR
+================================================== */
 
-/* =====================================
-   CUSTOM MOUSE CURSOR
-===================================== */
+@media (pointer: fine) {
 
-/* Hide default cursor on desktop */
-@media (hover: hover) and (pointer: fine) {
   body,
-  a,
-  button,
-  input,
-  textarea,
-  select,
-  [role="button"],
-  .cursor-pointer {
+  body * {
     cursor: none !important;
+  }
+
+  .custom-cursor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    z-index: 999999;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    will-change: transform;
+  }
+
+  .custom-cursor.cursor-visible {
+    opacity: 1;
+  }
+
+
+  /* ================================================
+     OUTER RING - CYAN
+  ================================================ */
+
+  .cursor-ring {
+    position: absolute;
+    width: 34px;
+    height: 34px;
+    top: -17px;
+    left: -17px;
+
+    border: 1.5px solid #06b6d4;
+    border-radius: 50%;
+
+    background: rgba(6, 182, 212, 0.04);
+
+    box-shadow:
+      0 0 10px rgba(6, 182, 212, 0.35),
+      inset 0 0 8px rgba(6, 182, 212, 0.12);
+
+    transition:
+      width 0.25s ease,
+      height 0.25s ease,
+      top 0.25s ease,
+      left 0.25s ease,
+      background 0.25s ease,
+      border-color 0.25s ease,
+      transform 0.2s ease;
+  }
+
+
+  /* ================================================
+     CENTER DOT - LIGHT CYAN
+  ================================================ */
+
+  .cursor-dot {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    top: -3px;
+    left: -3px;
+
+    border-radius: 50%;
+
+    background: #67e8f9;
+
+    box-shadow:
+      0 0 12px #06b6d4,
+      0 0 5px #a5f3fc;
+
+    transition:
+      transform 0.2s ease,
+      background 0.2s ease;
+  }
+
+
+  /* ================================================
+     HOVER EFFECT - BLUE
+  ================================================ */
+
+  .cursor-hover .cursor-ring {
+    width: 52px;
+    height: 52px;
+    top: -26px;
+    left: -26px;
+
+    background: rgba(59, 130, 246, 0.12);
+    border-color: #60a5fa;
+
+    box-shadow:
+      0 0 15px rgba(59, 130, 246, 0.55),
+      inset 0 0 10px rgba(59, 130, 246, 0.15);
+  }
+
+  .cursor-hover .cursor-dot {
+    transform: scale(1.5);
+    background: #93c5fd;
+
+    box-shadow:
+      0 0 12px #3b82f6;
+  }
+
+
+  /* ================================================
+     TEXT SELECTION - PURPLE
+  ================================================ */
+
+  .cursor-text .cursor-ring {
+    width: 3px;
+    height: 30px;
+    top: -15px;
+    left: -1.5px;
+
+    border-radius: 2px;
+
+    background: #a78bfa;
+    border-color: #a78bfa;
+
+    box-shadow:
+      0 0 10px rgba(167, 139, 250, 0.8);
+  }
+
+  .cursor-text .cursor-dot {
+    opacity: 0;
+  }
+
+
+  /* ================================================
+     CLICK COMPRESSION - PURPLE
+  ================================================ */
+
+  .cursor-ring.cursor-clicking {
+    transform: scale(0.72);
+
+    background: rgba(168, 85, 247, 0.25);
+    border-color: #c084fc;
+  }
+
+  .cursor-dot.dot-clicking {
+    transform: scale(2.2);
+
+    background: #f0abfc;
   }
 }
 
-/* Interactive elements */
-a,
-button,
-[role="button"],
-.cursor-pointer {
-  -webkit-tap-highlight-color: transparent;
+
+/* ==================================================
+   LIQUID WATER TRAIL
+================================================== */
+
+.cursor-tail {
+  position: fixed;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  z-index: 999997;
+  pointer-events: none;
+
+  overflow: visible;
+
+  opacity: 0;
+  transition: opacity 0.15s ease;
 }
 
-/* Main cursor */
-.custom-cursor {
-  transition: opacity 0.2s ease;
-  will-change: transform;
+.cursor-tail.tail-visible {
+  opacity: 1;
 }
 
-/* Outer ring */
-.custom-cursor-ring {
-  border: 1px solid rgba(120, 120, 120, 0.8);
-  background: transparent;
 
-  transition:
-    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
-    width 0.3s ease,
-    height 0.3s ease,
-    border-color 0.3s ease,
-    background 0.3s ease,
-    box-shadow 0.3s ease;
+/* ================================================
+   LIQUID SHADOW - DEEP TEAL
+================================================ */
+
+.tail-shadow {
+  fill: #0891b2;
+  stroke: none;
+
+  opacity: 0.7;
+
+  filter:
+    drop-shadow(0 0 10px rgba(8, 145, 178, 0.8));
+}
+
+
+/* ================================================
+   MAIN LIQUID BODY - CYAN
+================================================ */
+
+.tail-main {
+  fill: #22d3ee;
+  stroke: none;
+
+  opacity: 0.95;
+
+  filter:
+    drop-shadow(0 0 3px #22d3ee) drop-shadow(0 0 7px #06b6d4) drop-shadow(0 0 13px rgba(8, 145, 178, 0.6));
+}
+
+
+/* ================================================
+   WATER STARTING BULB - ICE BLUE
+================================================ */
+
+.tail-start {
+  fill: #a5f3fc;
+
+  stroke: #22d3ee;
+  stroke-width: 1.5;
+
+  opacity: 0.98;
+
+  filter:
+    drop-shadow(0 0 4px #67e8f9) drop-shadow(0 0 9px #06b6d4);
+}
+
+
+/* ==================================================
+   CLICK: SNAKE SPLITTING EFFECT
+================================================ */
+
+.cursor-burst {
+  position: fixed;
+
+  width: 60px;
+  height: 30px;
+
+  z-index: 999998;
+  pointer-events: none;
+}
+
+.snake-piece {
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 60px;
+  height: 30px;
+
+  overflow: visible;
+
+  opacity: 0;
 
   transform-origin: center;
 }
 
-/* Hover effect */
-.custom-cursor-ring.cursor-hover {
-  border-color: #06b6d4;
-  background: rgba(6, 182, 212, 0.12);
-  box-shadow:
-    0 0 10px rgba(6, 182, 212, 0.2),
-    0 0 25px rgba(6, 182, 212, 0.12);
+
+/* ================================================
+   INDIVIDUAL SNAKE PIECE COLORS
+================================================ */
+
+.snake-piece path {
+  fill: none;
+
+  stroke-width: 5;
+
+  stroke-linecap: round;
+  stroke-linejoin: round;
+
+  filter:
+    drop-shadow(0 0 4px currentColor) drop-shadow(0 0 9px currentColor);
 }
 
-/* Center dot */
-.custom-cursor-dot {
-  background: #111827;
-  border-radius: 50%;
-  transition: transform 0.2s ease;
+
+/* Cyan */
+
+.piece-1 {
+  color: #06b6d4;
 }
 
-.dark .custom-cursor-dot {
-  background: white;
+.piece-1 path {
+  stroke: #06b6d4;
 }
 
-/* Click ripple */
-.custom-cursor-ripple {
-  border: 1px solid rgba(6, 182, 212, 0.8);
-  animation: cursor-ripple 0.55s ease-out forwards;
+
+/* Blue */
+
+.piece-2 {
+  color: #3b82f6;
 }
 
-@keyframes cursor-ripple {
+.piece-2 path {
+  stroke: #3b82f6;
+}
+
+
+/* Violet */
+
+.piece-3 {
+  color: #8b5cf6;
+}
+
+.piece-3 path {
+  stroke: #8b5cf6;
+}
+
+
+/* Purple */
+
+.piece-4 {
+  color: #a855f7;
+}
+
+.piece-4 path {
+  stroke: #a855f7;
+}
+
+
+/* Pink */
+
+.piece-5 {
+  color: #ec4899;
+}
+
+.piece-5 path {
+  stroke: #ec4899;
+}
+
+
+/* Light Pink */
+
+.piece-6 {
+  color: #f472b6;
+}
+
+.piece-6 path {
+  stroke: #f472b6;
+}
+
+
+/* Turquoise */
+
+.piece-7 {
+  color: #22d3ee;
+}
+
+.piece-7 path {
+  stroke: #22d3ee;
+}
+
+
+/* Indigo */
+
+.piece-8 {
+  color: #818cf8;
+}
+
+.piece-8 path {
+  stroke: #818cf8;
+}
+
+
+/* ==================================================
+   SNAKE SPLITTING ANIMATIONS
+================================================== */
+
+.snake-splitting .piece-1 {
+  animation: snake-piece-1 0.8s ease-out forwards;
+}
+
+.snake-splitting .piece-2 {
+  animation: snake-piece-2 0.8s ease-out 0.02s forwards;
+}
+
+.snake-splitting .piece-3 {
+  animation: snake-piece-3 0.8s ease-out 0.04s forwards;
+}
+
+.snake-splitting .piece-4 {
+  animation: snake-piece-4 0.8s ease-out 0.06s forwards;
+}
+
+.snake-splitting .piece-5 {
+  animation: snake-piece-5 0.8s ease-out 0.08s forwards;
+}
+
+.snake-splitting .piece-6 {
+  animation: snake-piece-6 0.8s ease-out 0.1s forwards;
+}
+
+.snake-splitting .piece-7 {
+  animation: snake-piece-7 0.8s ease-out 0.12s forwards;
+}
+
+.snake-splitting .piece-8 {
+  animation: snake-piece-8 0.8s ease-out 0.14s forwards;
+}
+
+
+/* ==================================================
+   INDIVIDUAL SNAKE MOVEMENTS
+================================================== */
+
+@keyframes snake-piece-1 {
   0% {
-    transform: scale(0.5);
     opacity: 1;
+    transform: translate(0, 0) rotate(0) scale(1);
   }
 
   100% {
-    transform: scale(2.2);
     opacity: 0;
+    transform: translate(-85px, -75px) rotate(-120deg) scale(0.2);
   }
 }
 
-/* Smooth cursor transitions */
-.custom-cursor,
-.custom-cursor-ring,
-.custom-cursor-dot {
-  pointer-events: none;
+
+@keyframes snake-piece-2 {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(0) scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(85px, -85px) rotate(120deg) scale(0.2);
+  }
 }
 
-/* Accessibility */
-@media (prefers-reduced-motion: reduce) {
+
+@keyframes snake-piece-3 {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(0) scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(-115px, 0) rotate(-180deg) scale(0.2);
+  }
+}
+
+
+@keyframes snake-piece-4 {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(0) scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(115px, 0) rotate(180deg) scale(0.2);
+  }
+}
+
+
+@keyframes snake-piece-5 {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(0) scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(-85px, 75px) rotate(120deg) scale(0.2);
+  }
+}
+
+
+@keyframes snake-piece-6 {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(0) scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(85px, 85px) rotate(-120deg) scale(0.2);
+  }
+}
+
+
+@keyframes snake-piece-7 {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(0) scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(0, -110px) rotate(90deg) scale(0.2);
+  }
+}
+
+
+@keyframes snake-piece-8 {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(0) scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(0, 110px) rotate(-90deg) scale(0.2);
+  }
+}
+
+
+/* ==================================================
+   MOBILE + ACCESSIBILITY
+================================================== */
+
+@media (pointer: coarse),
+(prefers-reduced-motion: reduce) {
+
   .custom-cursor,
-  .custom-cursor-ring,
-  .custom-cursor-dot {
-    transition: none !important;
+  .cursor-tail,
+  .cursor-burst {
+    display: none !important;
   }
 
-  .custom-cursor-ripple {
-    animation: none !important;
+  body,
+  body * {
+    cursor: auto !important;
   }
 }
