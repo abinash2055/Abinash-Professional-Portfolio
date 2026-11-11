@@ -137,9 +137,29 @@ header button:focus-visible {
     transform: scaleX(1);
 }
 
-
-
 /* Hover text effect */
 .nav-link:hover {
     color: var(--accent, #4338CA) !important;
+}
+
+/* Resume Download Progress Bar */
+@keyframes resume-indeterminate {
+    from {
+        transform: translateX(-65%);
+    }
+
+    to {
+        transform: translateX(185%);
+    }
+}
+
+/* NavLink Text Color */
+/* For Light Mode */
+:root {
+    --nav-active-text: var(--accent, #4338CA);
+}
+
+/* For Dark Mode */
+.dark {
+    --nav-active-text: #e9d38c;
 }
