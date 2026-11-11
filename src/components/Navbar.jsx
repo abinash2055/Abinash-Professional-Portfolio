@@ -1,49 +1,116 @@
-import React from 'react'
-
-// Navbar Components
+import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { Menu, X } from "lucide-react";
 import Logo from "./navbar/Logo";
 import Title from "./navbar/Title";
-import NavLinks from './navbar/NavLinks';
-import ResumeMenu from './navbar/ResumeMenu';
-import GetHire from './navbar/GetHire';
-import ToggleTheme from './navbar/ToggleTheme';
+import NavLinks from "./navbar/NavLinks";
+import ResumeMenu from "./navbar/ResumeMenu";
+import ToggleTheme from "./navbar/ToggleTheme";
+import GetHire from "./navbar/GetHire";
+import "../styles/navbar.css"
 
-const Navbar = () => {
+const css = `
+.nb-desktop { display: none; }
+.nb-burger  { display: inline-grid; }
+.nb-title   { display: none; }
+@media (min-width: 640px)  { .nb-title { display: block; } }
+@media (min-width: 1024px) {
+    .nb-desktop { display: flex; }
+    .nb-burger  { display: none; }
+}
+`;
+
+export default function Navbar() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
   return (
-    <nav className="w-full px-5 py-4 sm:px-8 lg:px-12">
-      <div className="flex w-full items-center gap-4">
+    <header
+      style={{
+        position: "sticky",
+        top: 0,
+        zIndex: 50,
+        background: "color-mix(in srgb, var(--bg, #FFFFFF) 82%, transparent)",
+        backdropFilter: "blur(14px)",
+        WebkitBackdropFilter: "blur(14px)",
+        borderBottom: "1px solid var(--border, #E2E8F0)",
+      }}
+    >
+      <style>{css}</style>
 
-        {/* Navbar Logo */}
-        <Logo />
-
-        {/* Navbar Title */}
-        <div className="ml-3 shrink-0">
-          <Title />
+      <div
+        style={{
+          maxWidth: 1280,
+          margin: "0 auto",
+          padding: "10px 20px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: 16,
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+          <Logo />
+          <div className="nb-title">
+            <Title />
+          </div>
         </div>
 
-        {/* Navigation Links */}
-        <div className="ml-16 shrink-0">
+        <div className="nb-desktop" style={{ alignItems: "center" }}>
           <NavLinks />
         </div>
 
-        {/* Resume Dropdown */}
-        <div className="ml-16 shrink-0 rounded-xl">
-          <ResumeMenu />
-        </div>
-
-        {/* Get Hired Button */}
-        <div className="shrink-0">
-          <GetHire />
-        </div>
-
-        {/* Theme Toggle */}
-        <div className="ml-2 shrink-0">
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <div className="nb-desktop" style={{ alignItems: "center", gap: 12 }}>
+            <ResumeMenu />
+            <GetHire />
+          </div>
           <ToggleTheme />
+          <button
+            type="button"
+            className="nb-burger"
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen((v) => !v)}
+            style={{
+              placeItems: "center",
+              width: 38,
+              height: 38,
+              borderRadius: 12,
+              cursor: "pointer",
+              color: "var(--text, #111827)",
+              background: "var(--surface, #F8FAFC)",
+              border: "1px solid var(--border, #E2E8F0)",
+            }}
+          >
+            {menuOpen ? <X size={18} /> : <Menu size={18} />}
+          </button>
         </div>
-
       </div>
-    </nav>
-  )
-}
 
-export default Navbar
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            className="nb-burger"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            style={{
+              display: "block",
+              overflow: "hidden",
+              borderTop: "1px solid var(--border, #E2E8F0)",
+            }}
+          >
+            <div style={{ padding: "16px 20px 20px", display: "grid", gap: 16 }}>
+              <NavLinks orientation="vertical" showTitle onNavigate={() => setMenuOpen(false)} />
+              <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 12 }}>
+                <ResumeMenu />
+                <GetHire onClick={() => setMenuOpen(false)} />
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </header>
+  );
+}

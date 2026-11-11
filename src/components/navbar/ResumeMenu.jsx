@@ -1,233 +1,322 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
+import { AnimatePresence, motion } from "framer-motion";
+import { ChevronDown, Download, Eye, FileText, FileUser, X } from "lucide-react";
+import resumeMenu from "../../data/navbar/ResumeMenu";
 
-// Import Resume Configuration
-import resumeMenu from "../../data/navbar/ResumeMenu"
+const icons = { "file-user": FileUser };
 
-const ResumeMenu = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedResume, setSelectedResume] = useState(null);
-  const [showDownloadModal, setShowDownloadModal] = useState(false);
+const formats = [
+  { key: "pdf", label: "PDF", note: "Best for reading and sharing" },
+  { key: "docx", label: "Word (DOCX)", note: "Best for editing" },
+];
 
-  // Control Resume Menu entrance animation
-  const [loaded, setLoaded] = useState(false);
+export default function ResumeMenu() {
+  const { title, icon, resumes, animation } = resumeMenu;
+  const Icon = icons[icon] ?? FileUser;
+  const animated = animation?.enabled;
+  const duration = animation?.duration ?? 0.25;
 
+  const [open, setOpen] = useState(false);
+  const [downloadFor, setDownloadFor] = useState(null); // resume chosen for download
+  const [mounted, setMounted] = useState(false);
+  const wrapRef = useRef(null);
+
+  useEffect(() => setMounted(true), []);
+
+  // Close the dropdown on outside click or Escape.
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoaded(true);
-    }, 100);
+    if (!open) return;
+    const onDown = (e) => {
+      if (wrapRef.current && !wrapRef.current.contains(e.target)) setOpen(false);
+    };
+    const onKey = (e) => e.key === "Escape" && setOpen(false);
+    document.addEventListener("mousedown", onDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
 
-    return () => clearTimeout(timer);
-  }, []);
+  // Close the popup on Escape.
+  useEffect(() => {
+    if (!downloadFor) return;
+    const onKey = (e) => e.key === "Escape" && setDownloadFor(null);
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [downloadFor]);
 
-
-
-  // Open PDF Resume in New Tab
-  const handleView = (resume) => {
+  const viewPdf = (resume) => {
     window.open(resume.files.pdf, "_blank", "noopener,noreferrer");
-    setIsOpen(false);
+    setOpen(false);
   };
 
-
-  // Open Download Popup
-  const handleDownload = (resume) => {
-    setSelectedResume(resume);
-    setShowDownloadModal(true);
-    setIsOpen(false);
+  const startDownload = (resume) => {
+    setOpen(false);
+    setDownloadFor(resume);
   };
 
-
-  // Close Download Popup
-  const closeModal = () => {
-    setShowDownloadModal(false);
-    setSelectedResume(null);
+  const actionStyle = {
+    display: "inline-flex",
+    alignItems: "center",
+    gap: 6,
+    padding: "7px 12px",
+    borderRadius: 999,
+    fontSize: 13,
+    fontWeight: 600,
+    cursor: "pointer",
+    border: "1px solid var(--border, #E2E8F0)",
+    background: "transparent",
+    color: "var(--text, #111827)",
   };
 
   return (
-    <>
-      {/* Resume DropDown */}
-      <div className={`
-    relative
-    transition-all duration-[2000ms] ease-out
-    ${loaded
-          ? "translate-y-0 opacity-100"
-          : "-translate-y-20 opacity-0"
-        }
-  `}>
-        <button
-          type="button"
-          onClick={() => setIsOpen(!isOpen)}
-          aria-expanded={isOpen}
-          className={`
-            flex items-center gap-2
-            rounded-lg border px-4 py-2
-            text-base font-semibold
-            transition-all duration-[2000ms] ease-out
-            hover:text-blue-500
-            ${loaded
-              ? "translate-y-0 opacity-100"
-              : "-translate-y-20 opacity-0"
-            }
-          `}
+    <div ref={wrapRef} style={{ position: "relative" }}>
+      <motion.button
+        type="button"
+        aria-haspopup="menu"
+        aria-expanded={open}
+        onClick={() => setOpen((v) => !v)}
+        whileHover={animated ? { scale: 1.04 } : undefined}
+        whileTap={animated ? { scale: 0.97 } : undefined}
+        style={{
+          display: "inline-flex",
+          alignItems: "center",
+          gap: 8,
+          padding: "9px 14px",
+          borderRadius: 999,
+          fontSize: 14,
+          fontWeight: 600,
+          cursor: "pointer",
+          whiteSpace: "nowrap",
+          color: "var(--text, #111827)",
+          background: "var(--surface, #F8FAFC)",
+          border: "1px solid var(--border, #E2E8F0)",
+        }}
+      >
+        <Icon size={16} />
+        <span>{title}</span>
+        <motion.span
+          animate={{ rotate: open ? 180 : 0 }}
+          transition={{ duration }}
+          style={{ display: "grid", placeItems: "center" }}
         >
-          {resumeMenu.title}
+          <ChevronDown size={15} />
+        </motion.span>
+      </motion.button>
 
-          <span
-            className={`transition-transform duration-300 ${isOpen ? "rotate-180" : ""
-              }`}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            role="menu"
+            initial={animated ? { opacity: 0, y: -8, scale: 0.97 } : false}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={animated ? { opacity: 0, y: -8, scale: 0.97 } : undefined}
+            transition={{ duration, ease: "easeOut" }}
+            style={{
+              position: "absolute",
+              right: 0,
+              top: "calc(100% + 12px)",
+              width: 340,
+              maxWidth: "calc(100vw - 32px)",
+              padding: 8,
+              borderRadius: 16,
+              zIndex: 60,
+              transformOrigin: "top right",
+              background: "var(--surface, #F8FAFC)",
+              border: "1px solid var(--border, #E2E8F0)",
+              boxShadow: "0 20px 50px var(--glow, rgba(129,140,248,0.25))",
+            }}
           >
-            ▾
-          </span>
-        </button>
-
-        {/* Dropdown Content */}
-        {isOpen && (
-          <div
-            className="
-              absolute right-0 top-full z-50 mt-3
-              w-64 overflow-hidden
-              rounded-xl border
-              bg-white p-2 shadow-xl"
-          >
-            {resumeMenu.resumes.map((resume) => (
+            {resumes.map((resume) => (
               <div
                 key={resume.id}
-                className="
-                  rounded-lg p-3
-                  transition-colors duration-200
-                "
+                role="none"
+                style={{
+                  padding: 12,
+                  borderRadius: 12,
+                }}
               >
-                {/* Resume Title */}
-                <p className="mb-2 text-sm font-bold">
+                <div style={{ fontSize: 14, fontWeight: 600, color: "var(--text, #111827)" }}>
                   {resume.name}
-                </p>
-
-                {/* Resume Actions */}
-                <div className="flex items-center gap-2">
-
+                </div>
+                <div
+                  style={{
+                    marginTop: 2,
+                    fontSize: 12.5,
+                    color: "var(--text-secondary, #64748B)",
+                  }}
+                >
+                  {resume.description}
+                </div>
+                <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
                   <button
                     type="button"
-                    onClick={() => handleView(resume)}
-                    className="
-                      flex-1 rounded-md px-3 py-2 border
-                      text-sm font-medium hover:text-white
-                      transition-colors hover:bg-blue-600 
-                    "
+                    role="menuitem"
+                    onClick={() => viewPdf(resume)}
+                    style={actionStyle}
                   >
-                    View
+                    <Eye size={14} /> Show PDF
                   </button>
-
                   <button
                     type="button"
-                    onClick={() => handleDownload(resume)}
-                    className="
-                      flex-1 rounded-md
-                      border px-3 py-2
-                      text-sm font-medium
-                      hover:text-white hover:bg-gray-700"
+                    role="menuitem"
+                    onClick={() => startDownload(resume)}
+                    style={{
+                      ...actionStyle,
+                      color: "#FFFFFF",
+                      border: "none",
+                      backgroundImage:
+                        "var(--brand-gradient, linear-gradient(to right, #4338CA, #818CF8))",
+                    }}
                   >
-                    Download
+                    <Download size={14} /> Download resume
                   </button>
-
                 </div>
               </div>
             ))}
-          </div>
+          </motion.div>
         )}
-      </div>
+      </AnimatePresence>
 
-      {/* Download Format Modal */}
-      {showDownloadModal && selectedResume && (
-        <div
-          className="
-            fixed inset-0 z-[100]
-            flex items-center justify-center
-            px-4 backdrop-blur-sm
-          "
-          onClick={closeModal}
-        >
-          <div
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="resume-modal-title"
-            className="
-              w-full max-w-sm rounded-2xl
-              border
-              p-6 shadow-2xl
-            "
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Modal Heading */}
-            <h2
-              id="resume-modal-title"
-              className="text-xl font-bold"
-            >
-              Download Resume
-            </h2>
-
-            <p className="mt-2 text-sm">
-              Choose your preferred file format for{" "}
-              <span className="font-semibold">
-                {selectedResume.name}
-              </span>
-              .
-            </p>
-
-            {/* Download Options */}
-            <div className="mt-6 grid grid-cols-2 gap-3">
-
-              <a
-                href={selectedResume.files.pdf}
-                download
-                className="
-                  flex flex-col items-center gap-2
-                  rounded-xl border bg-gray-300
-                  p-4 text-center transition-all hover:bg-gray-600"
+      {/* Download popup */}
+      {mounted &&
+        createPortal(
+          <AnimatePresence>
+            {downloadFor && (
+              <motion.div
+                key="backdrop"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                onClick={() => setDownloadFor(null)}
+                style={{
+                  position: "fixed",
+                  inset: 0,
+                  zIndex: 100,
+                  display: "grid",
+                  placeItems: "center",
+                  padding: 16,
+                  background: "rgba(9, 9, 15, 0.55)",
+                  backdropFilter: "blur(4px)",
+                }}
               >
-                <span className="text-3xl">📄</span>
-                <span className="font-semibold">
-                  PDF
-                </span>
-                <span className="text-xs">
-                  .pdf file
-                </span>
-              </a>
+                <motion.div
+                  role="dialog"
+                  aria-modal="true"
+                  aria-label={`Download ${downloadFor.name} resume`}
+                  onClick={(e) => e.stopPropagation()}
+                  initial={{ opacity: 0, y: 16, scale: 0.96 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 16, scale: 0.96 }}
+                  transition={{ duration, ease: "easeOut" }}
+                  style={{
+                    position: "relative",
+                    width: 400,
+                    maxWidth: "100%",
+                    padding: 24,
+                    borderRadius: 20,
+                    background: "var(--surface, #F8FAFC)",
+                    color: "var(--text, #111827)",
+                    border: "1px solid var(--border, #E2E8F0)",
+                    boxShadow: "0 30px 80px rgba(0,0,0,0.35)",
+                  }}
+                >
+                  <button
+                    type="button"
+                    aria-label="Close"
+                    onClick={() => setDownloadFor(null)}
+                    style={{
+                      position: "absolute",
+                      top: 14,
+                      right: 14,
+                      display: "grid",
+                      placeItems: "center",
+                      width: 30,
+                      height: 30,
+                      borderRadius: "50%",
+                      border: "none",
+                      cursor: "pointer",
+                      background: "transparent",
+                      color: "var(--text-secondary, #64748B)",
+                    }}
+                  >
+                    <X size={18} />
+                  </button>
 
-              <a
-                href={selectedResume.files.docx}
-                download
-                className="
-                  flex flex-col items-center gap-2
-                  rounded-xl border bg-gray-300
-                  p-4 text-center transition-all hover:bg-gray-600
-                "
-              >
-                <span className="text-3xl">📝</span>
-                <span className="font-semibold">
-                  DOCX
-                </span>
-                <span className="text-xs">
-                  .docx file
-                </span>
-              </a>
+                  <h3 style={{ margin: 0, fontSize: 18, fontWeight: 700 }}>
+                    Download resume
+                  </h3>
+                  <p
+                    style={{
+                      margin: "4px 0 18px",
+                      fontSize: 13.5,
+                      color: "var(--text-secondary, #64748B)",
+                    }}
+                  >
+                    {downloadFor.name}. Choose a file format.
+                  </p>
 
-            </div>
-
-            {/* Close Button */}
-            <button
-              type="button"
-              onClick={closeModal}
-              className="
-                mt-5 w-full rounded-lg
-                px-4 py-2 border hover:bg-gray-700 hover:text-white
-                text-sm font-semibold"
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      )}
-    </>
+                  <div style={{ display: "grid", gap: 10 }}>
+                    {formats.map(({ key, label, note }) => (
+                      <motion.a
+                        key={key}
+                        href={downloadFor.files[key]}
+                        download
+                        onClick={() => setTimeout(() => setDownloadFor(null), 200)}
+                        whileHover={animated ? { scale: 1.02 } : undefined}
+                        whileTap={animated ? { scale: 0.98 } : undefined}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 14,
+                          padding: "14px 16px",
+                          borderRadius: 14,
+                          textDecoration: "none",
+                          color: "var(--text, #111827)",
+                          background: "var(--bg, #FFFFFF)",
+                          border: "1px solid var(--border, #E2E8F0)",
+                        }}
+                      >
+                        <span
+                          style={{
+                            display: "grid",
+                            placeItems: "center",
+                            width: 40,
+                            height: 40,
+                            borderRadius: 12,
+                            color: "var(--accent, #4338CA)",
+                            background: "var(--glow, rgba(129,140,248,0.25))",
+                          }}
+                        >
+                          <FileText size={20} />
+                        </span>
+                        <span style={{ flex: 1 }}>
+                          <span style={{ display: "block", fontSize: 14, fontWeight: 600 }}>
+                            {label}
+                          </span>
+                          <span
+                            style={{
+                              display: "block",
+                              fontSize: 12.5,
+                              color: "var(--text-secondary, #64748B)",
+                            }}
+                          >
+                            {note}
+                          </span>
+                        </span>
+                        <Download size={18} color="var(--accent, #4338CA)" />
+                      </motion.a>
+                    ))}
+                  </div>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>,
+          document.body
+        )}
+    </div>
   );
-};
-
-export default ResumeMenu;
+}

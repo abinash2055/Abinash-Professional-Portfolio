@@ -1,62 +1,42 @@
-
-import React, { useEffect, useState } from "react";
-
-// Import navbar title configuration
+import { motion } from "framer-motion";
 import navbarTitle from "../../data/navbar/Title";
 
-const Title = () => {
+export default function Title() {
+    const { title, animation } = navbarTitle;
+    const animated = animation?.enabled;
 
-  // Extract title information
-  const { title } = navbarTitle;
-
-  // Control entrance animation
-  const [loaded, setLoaded] = useState(false);
-
-  // Trigger animation when component mounts
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoaded(true);
-    }, 100);
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  return (
-    // Main title container
-    <div
-      className={`
-        relative z-10 flex min-w-0 flex-col justify-center
-        transition-all duration-[2500ms] ease-in-out
-        ${loaded
-          ? "translate-x-0 opacity-100"
-          : "translate-x-32 opacity-0"
-        }
-      `}
-    >
-
-      {/* Portfolio Owner Name */}
-      <h1 className="
-        whitespace-nowrap
-        text-base font-extrabold
-        tracking-wide
-        text-black
-        sm:text-xl md:text-2xl
-      ">
-        {title.name}
-      </h1>
-
-      {/* Professional Designation */}
-      <p className="
-        mt-1
-        text-[10px] font-semibold
-        uppercase tracking-[0.2em]
-        sm:text-xs md:text-sm
-      ">
-        {title.description}
-      </p>
-
-    </div>
-  );
-};
-
-export default Title;
+    return (
+        <motion.div
+            initial={animated ? { opacity: 0, y: -6 } : false}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: animation?.duration ?? 0.5, ease: "easeOut" }}
+            style={{ display: "flex", flexDirection: "column", lineHeight: 1.15 }}
+        >
+            <span
+                style={{
+                    fontSize: 16,
+                    fontWeight: 800,
+                    letterSpacing: "0.06em",
+                    color: "var(--text, #111827)",
+                    backgroundImage: "var(--brand-gradient, linear-gradient(to right, #4338CA, #818CF8))",
+                    WebkitBackgroundClip: "text",
+                    backgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                }}
+            >
+                {title.name}
+            </span>
+            <span
+                style={{
+                    marginTop: 3,
+                    fontSize: 11,
+                    fontWeight: 500,
+                    letterSpacing: "0.28em",
+                    color: "var(--text-secondary, #64748B)",
+                }}
+            >
+                {title.description}
+            </span>
+        </motion.div>
+    );
+}

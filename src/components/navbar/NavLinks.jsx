@@ -1,78 +1,130 @@
-
-import React from 'react';
-
-// Import navigation links configuration
+import { useEffect, useId, useState } from "react";
+import { motion } from "framer-motion";
 import navbarLinks from "../../data/navbar/NavLinks";
 
-const NavLinks = () => {
-  const { title, links } = navbarLinks;
+/**
+ * Props
+ *  - orientation: "horizontal" (desktop bar) or "vertical" (mobile menu)
+ *  - showTitle:   show the "Explore" heading, useful in the mobile menu
+ *  - onNavigate:  called after a link is clicked, e.g. to close the mobile menu
+ */
+export default function NavLinks({ orientation = "horizontal", showTitle = false, onNavigate }) {
+  const { title, links, animation } = navbarLinks;
+  const [active, setActive] = useState(links[0]?.path);
+  const pillId = useId();
+  const vertical = orientation === "vertical";
+  const animated = animation?.enabled;
+
+  // Highlight the link whose section is currently in the middle of the screen.
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) setActive(`#${entry.target.id}`);
+        });
+      },
+      { rootMargin: "-45% 0px -50% 0px" }
+    );
+    links.forEach(({ path }) => {
+      const el = document.getElementById(path.replace("#", ""));
+      if (el) observer.observe(el);
+    });
+    return () => observer.disconnect();
+  }, [links]);
+
+  const handleClick = (e, path) => {
+    const target = document.querySelector(path);
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: "smooth" });
+      setActive(path);
+    }
+    onNavigate?.();
+  };
+
+  const container = {
+    hidden: {},
+    visible: { transition: { staggerChildren: animation?.stagger ?? 0.08 } },
+  };
+  const item = {
+    hidden: animated ? { opacity: 0, ...(vertical ? { x: -16 } : { y: -10 }) } : {},
+    visible: {
+      opacity: 1,
+      x: 0,
+      y: 0,
+      transition: { duration: animation?.duration ?? 0.3, ease: "easeOut" },
+    },
+  };
 
   return (
-    <>
-      <style>{`
-        @keyframes navSlideFromTop {
-          from {
-            opacity: 0;
-            transform: translateY(-60px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        .nav-entrance-item {
-          animation-name: navSlideFromTop;
-          animation-duration: 2000ms;
-          animation-timing-function: ease-out;
-          animation-fill-mode: both;
-        }
-      `}</style>
-
-      <nav
-        aria-label={title}
-        className="flex items-center justify-center"
+    <nav aria-label={title}>
+      {showTitle && (
+        <p
+          style={{
+            margin: "0 0 10px 14px",
+            fontSize: 13,
+            fontWeight: 600,
+            color: "var(--text-secondary, #64748B)",
+          }}
+        >
+          {title}
+        </p>
+      )}
+      <motion.ul
+        variants={container}
+        initial="hidden"
+        animate="visible"
+        style={{
+          display: "flex",
+          flexDirection: vertical ? "column" : "row",
+          alignItems: vertical ? "stretch" : "center",
+          gap: vertical ? 4 : 2,
+          margin: 0,
+          padding: 0,
+          listStyle: "none",
+        }}
       >
-        <ul className="flex items-center gap-2 lg:gap-3">
-          {links.map((link, index) => (
-            <li
-              key={link.id}
-              className="nav-entrance-item"
-              style={{
-                animationDelay: `${index * 200}ms`,
-              }}
-            >
+        {links.map(({ id, name, path }) => {
+          const isActive = active === path;
+          return (
+            <motion.li key={id} variants={item} style={{ position: "relative" }}>
               <a
-                href={link.path}
-                className="
-                  group relative inline-flex items-center
-                  rounded-lg px-3 py-2
-                  text-base font-bold uppercase
-                  transition-colors duration-300
-                  hover:text-blue-600
-                  dark:hover:text-blue-400
-                  focus-visible:outline-none
-                  focus-visible:ring-2 focus-visible:ring-blue-500
-                "
+                href={path}
+                onClick={(e) => handleClick(e, path)}
+                aria-current={isActive ? "location" : undefined}
+                style={{
+                  position: "relative",
+                  display: "block",
+                  padding: vertical ? "12px 14px" : "8px 14px",
+                  borderRadius: 999,
+                  fontSize: 14,
+                  fontWeight: isActive ? 600 : 500,
+                  textDecoration: "none",
+                  color: isActive
+                    ? "var(--accent, #4338CA)"
+                    : "var(--text-secondary, #64748B)",
+                  transition: "color 0.25s ease",
+                }}
               >
-                {link.name}
-
-                <span
-                  className="
-                    absolute bottom-1 left-3 right-3
-                    h-0.5 origin-left scale-x-0
-                    rounded-full bg-blue-500
-                    transition-transform duration-300
-                    group-hover:scale-x-100
-                  "
-                />
+                {isActive && (
+                  <motion.span
+                    layoutId={`nav-pill-${pillId}`}
+                    transition={{ type: "spring", stiffness: 380, damping: 32 }}
+                    style={{
+                      position: "absolute",
+                      inset: 0,
+                      borderRadius: 999,
+                      background: "var(--glow, rgba(129,140,248,0.25))",
+                      zIndex: 0,
+                    }}
+                  />
+                )}
+                <span style={{ position: "relative", zIndex: 1 }}>{name}</span>
               </a>
-            </li>
-          ))}
-        </ul>
-      </nav>
-    </>
+            </motion.li>
+          );
+        })}
+      </motion.ul>
+    </nav>
   );
-};
-
-export default NavLinks;
+}

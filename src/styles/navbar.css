@@ -1,0 +1,108 @@
+/* ==========================================================
+   Navbar shared styles
+   Import once, e.g. in main.jsx / index.js / layout:
+   import "./components/navbar/navbar.css";
+   ========================================================== */
+
+/* ---------- Theme variables (match ToggleTheme.js data) ---------- */
+:root,
+:root[data-theme="light"] {
+    --bg: #ffffff;
+    --surface: #f8fafc;
+    --text: #111827;
+    --text-secondary: #64748b;
+    --border: #e2e8f0;
+    --glow: rgba(129, 140, 248, 0.25);
+    --accent: #4338ca;
+    --brand-gradient: linear-gradient(to right, #4338ca, #818cf8, #f9a8d4);
+    color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+    --bg: #09090f;
+    --surface: #111827;
+    --text: #f8fafc;
+    --text-secondary: #94a3b8;
+    --border: #27272a;
+    --glow: rgba(139, 92, 246, 0.25);
+    --accent: #8b5cf6;
+    --brand-gradient: linear-gradient(135deg, #6366f1, #8b5cf6, #ec4899);
+    color-scheme: dark;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+}
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 80px; /* keeps sections clear of the sticky navbar */
+}
+
+/* ---------- Smooth theme switch (class added briefly by ToggleTheme) ---------- */
+html.theme-transition,
+html.theme-transition *,
+html.theme-transition *::before,
+html.theme-transition *::after {
+    transition: background-color 0.5s ease, color 0.5s ease,
+        border-color 0.5s ease, box-shadow 0.5s ease !important;
+}
+
+/* ---------- Theme toggle ---------- */
+@keyframes themeGradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+    100% {
+        background-position: 100% 50%;
+    }
+}
+
+.theme-toggle:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
+
+/* ---------- Navbar responsive rules (used by Navbar.js) ---------- */
+.nb-desktop {
+    display: none;
+}
+.nb-burger {
+    display: inline-grid;
+}
+.nb-title {
+    display: none;
+}
+
+@media (min-width: 640px) {
+    .nb-title {
+        display: block;
+    }
+}
+
+@media (min-width: 1024px) {
+    .nb-desktop {
+        display: flex;
+    }
+    .nb-burger {
+        display: none;
+    }
+}
+
+/* ---------- Keyboard focus for links and buttons ---------- */
+header a:focus-visible,
+header button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+/* ---------- Respect reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+    .theme-toggle {
+        animation: none !important;
+    }
+}
