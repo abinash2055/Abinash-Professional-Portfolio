@@ -60,7 +60,7 @@ const Home = () => {
         </section>
 
         {/* Awards and Certificates */}
-        <section id="awardscertificate" className="scroll-mt-24">
+        <section id="awards-and-certificate" className="scroll-mt-24">
           <AwardsCertificate />
         </section>
 
